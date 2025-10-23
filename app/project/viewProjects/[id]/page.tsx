@@ -45,9 +45,16 @@ export default function ProjectDetailPage() {
 
         const data = await response.json();
         setTasks(data.tasks || []);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong while loading tasks.");
-      } finally {
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Something went wrong while loading tasks.");
+        }
+      }
+
+
+      finally {
         setLoading(false);
       }
     };
@@ -60,8 +67,8 @@ export default function ProjectDetailPage() {
       status === "todo"
         ? "bg-red-100 text-red-700"
         : status === "inprogress"
-        ? "bg-yellow-100 text-yellow-700"
-        : "bg-green-100 text-green-700";
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-green-100 text-green-700";
 
     return (
       <span className={`inline-block px-3 py-1 text-sm font-semibold rounded-full ${colors}`}>
