@@ -35,7 +35,7 @@ export default function CreateTask() {
 
                     const data = await response.json();
                     setProjects(data.projects || null);
-                } catch (err: any) {
+                } catch (err: unknown) {
                     // setError(err.message || "Something went wrong while loading the task.");
                 } finally {
                     // setLoading(false);
