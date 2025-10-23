@@ -95,7 +95,7 @@ export default function ViewProjectsPage() {
         ) : (
           <div className="text-center mt-24">
             <p className="text-gray-500 mb-6 text-lg">
-              You don't have any projects yet.
+              You dont have any projects yet.
             </p>
             <Link
               href="/createProject"
