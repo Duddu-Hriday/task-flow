@@ -4,6 +4,12 @@ import { useRouter } from "next/navigation";
 import { getToken } from "@/lib/clientAuth";
 import { getUserFromToken } from "@/lib/auth";
 export default function CreateTask() {
+    interface Project {
+  id: string;
+  name: string;
+  description?: string;
+}
+
     const router = useRouter();
     const [projects, setProjects] = useState([]);
     useEffect(() => {
