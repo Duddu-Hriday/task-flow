@@ -114,11 +114,12 @@ export default function CreateTask() {
                         onChange={(e) => setProjectId(e.target.value)}
                     >
                         <option value="">Select Project</option>
-                        {projects?.map((project: any) => (
-                            <option key={project.id} value={project.id}>
-                                {project.name}
-                            </option>
-                        ))}
+                       {projects?.map((project: Project) => (
+  <option key={project.id} value={project.id}>
+    {project.name}
+  </option>
+))}
+
                     </select>
                     <select
                         className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
