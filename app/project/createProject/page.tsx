@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getToken } from "@/lib/clientAuth";
 import { getUserFromToken } from "@/lib/auth";
-export default function createProject() {
+export default function CreateProject() {
     const router = useRouter();
     useEffect(() => {
         const token = getToken();
