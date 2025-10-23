@@ -1,26 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserFromToken } from "@/lib/auth";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } } // context object with params
-) {
-  const { id } = params;
-
+// Use NextRequest for better type safety
+export async function PUT(req: NextRequest) {
   try {
+    // Extract the dynamic param from the URL
+    const id = req.nextUrl.pathname.split("/").pop();
+    if (!id) return NextResponse.json({ error: "Project ID missing" }, { status: 400 });
+
     const user = getUserFromToken(req.headers.get("Authorization") ?? undefined);
-    if (!user)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { name } = await req.json();
-    if (!name)
-      return NextResponse.json({ error: "Project name is required" }, { status: 400 });
+    if (!name) return NextResponse.json({ error: "Project name is required" }, { status: 400 });
 
     const project = await prisma.project.findUnique({ where: { id } });
-    if (!project)
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-
+    if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
     if (project.ownerId !== user.id)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
@@ -36,21 +32,16 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } } // same here
-) {
-  const { id } = params;
-
+export async function DELETE(req: NextRequest) {
   try {
+    const id = req.nextUrl.pathname.split("/").pop();
+    if (!id) return NextResponse.json({ error: "Project ID missing" }, { status: 400 });
+
     const user = getUserFromToken(req.headers.get("Authorization") ?? undefined);
-    if (!user)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const project = await prisma.project.findUnique({ where: { id } });
-    if (!project)
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-
+    if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
     if (project.ownerId !== user.id)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
