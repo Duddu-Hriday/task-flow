@@ -3,33 +3,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
 }
 
-model User{
-  id String @id @default(cuid())
-  name String
-  email String @unique
+model User {
+  id       String    @id @map("_id") @default(auto()) @db.ObjectId
+  name     String
+  email    String    @unique
   password String
-  project Project[]
+  projects Project[]
 }
 
-model Project{
-  id String @id @default(cuid())
-  name String
-  ownerId String
-  owner User @relation(fields: [ownerId], references: [id])
-  tasks Task[]
+model Project {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  name      String
+  ownerId   String   @db.ObjectId
+  owner     User     @relation(fields: [ownerId], references: [id])
+  tasks     Task[]
   createdAt DateTime @default(now())
 }
 
-model Task{
-  id String @id @default(cuid())
-  title String
+model Task {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  title     String
   description String?
-  status String @default("todo") // todo, inprogress, done
-  projectId String
-  project Project @relation(fields: [projectId], references: [id])
+  status    String   @default("todo") // todo, inprogress, done
+  projectId String   @db.ObjectId
+  project   Project  @relation(fields: [projectId], references: [id])
   createdAt DateTime @default(now())
 }
