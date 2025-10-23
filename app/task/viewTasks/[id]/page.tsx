@@ -46,9 +46,14 @@ export default function TaskDetail() {
 
         const data = await response.json();
         setTask(data.task || null);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong while loading the task.");
-      } finally {
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Something went wrong while loading tasks.");
+        }
+      }
+       finally {
         setLoading(false);
       }
     };
